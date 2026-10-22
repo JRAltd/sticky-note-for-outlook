@@ -1,58 +1,108 @@
-# How to Publish Email Sticky Notes So Anyone Can Install It
+# How to Install & Publish Email Sticky Notes for Outlook
 
-Right now, your add-in works locally via `https://localhost:3000`. Because Outlook add-ins are web applications loaded from the URL inside `manifest.xml`, making it installable by **anyone** (without them needing to install any software or run a local server) only requires hosting the `dist/` folder on any free `https://` static web host.
-
-Below are the **3 ways** to make it available to others—from a 60-second free drag-and-drop share link to the official Microsoft Outlook Add-in Store (AppSource).
-
----
-
-## Method 1: Share with Anyone via Free 60-Second Hosting (Netlify / Cloudflare / GitHub Pages)
-
-This lets **anyone** install your add-in in 30 seconds by visiting your install page (`https://your-addin-url/install.html`) or uploading a single `manifest.public.xml` file.
-
-### Step 1 — Host the `dist/` folder for free:
-- **Easiest (Drag & Drop — 60 seconds)**:
-  1. Go to **[app.netlify.com/drop](https://app.netlify.com/drop)** (or **Cloudflare Pages** / **GitHub Pages**).
-  2. Drag and drop the **`dist`** folder from this project into the browser window.
-  3. Netlify/Cloudflare immediately gives you a permanent HTTPS URL (for example: `https://email-sticky-notes.netlify.app`).
-
-### Step 2 — Stamp your public HTTPS URL into the manifest:
-Run this single PowerShell command in your project folder (replacing the URL with yours):
-```powershell
-.\scripts\Set-PublicHostUrl.ps1 -PublicUrl "https://email-sticky-notes.netlify.app"
-```
-Then drag the updated `dist` folder to Netlify once more so `/manifest.xml` on the site has your live URL.
-
-### Step 3 — Share!
-Send anyone either:
-- Your self-service install link: **`https://email-sticky-notes.netlify.app/install.html`** (which has a 1-click download button + instructions), OR
-- The generated **`manifest.public.xml`** file directly. They simply add it once in Outlook (**Apps → Manage Add-ins → Add from file**) and it works forever across Outlook Web, New Outlook for Windows, and Classic Outlook!
+## Live Public URLs (GitHub + GitHub Pages)
+- **GitHub Repository**: https://github.com/JRAltd/sticky-note-for-outlook
+- **Public Install Page**: https://jraltd.github.io/sticky-note-for-outlook/
+- **Live Public Taskpane**: https://jraltd.github.io/sticky-note-for-outlook/taskpane.html
+- **Live Public Manifest**: https://jraltd.github.io/sticky-note-for-outlook/manifest.xml
+- **Privacy Policy URL**: https://jraltd.github.io/sticky-note-for-outlook/privacy.html
+- **Support URL**: https://jraltd.github.io/sticky-note-for-outlook/support.html
 
 ---
 
-## Method 2: Deploy Automatically to Your Whole Organization (Microsoft 365 Admin Center)
+## Option A: How Anyone Can Install It in Outlook Right Now (No Waiting)
 
-If you want the **Email Notes** button to appear automatically in the Outlook ribbon for everyone in your company (with zero user setup):
+Anyone you share `https://jraltd.github.io/sticky-note-for-outlook/` with can install the add-in in 30 seconds:
 
-1. Complete **Step 1 & Step 2** above so `manifest.public.xml` points to your hosted `https://` URL.
-2. Open the **[Microsoft 365 Admin Center](https://admin.microsoft.com)**.
-3. Navigate to **Settings → Integrated apps → Upload custom apps**.
-4. Choose **Office Add-in** and upload **`manifest.public.xml`**.
-5. Assign it to **Entire organization** (or specific users/groups) and click **Deploy**.
-   - Within a few hours, the **Email Notes** and **Quick Note** buttons appear automatically in every user's Outlook!
+1. **Download the Manifest**:
+   - Visit https://jraltd.github.io/sticky-note-for-outlook/ and click **⬇️ 1. Download Add-in Manifest (manifest.xml)** *(or use `store-assets\manifest.public.xml` directly from this project folder)*.
+2. **Open Outlook's Add-in Manager**:
+   - Go to **https://aka.ms/olksideload** in your browser, **OR** inside **Outlook Web / New Outlook for Windows**:
+     - Click the **Apps** icon on the far-left sidebar.
+     - Click **Manage your apps** (bottom-left) or **Add apps → Manage your apps**.
+3. **Upload the File**:
+   - Click **My add-ins** (or scroll to **Custom Addins**).
+   - Click **Add a custom add-in → Add from file...**
+   - Select `email-sticky-notes-manifest.xml` (or `manifest.public.xml`) and click **Install**.
+4. **Use & Pin It**:
+   - Open any email in your Inbox, click **Email Notes** in the message ribbon/toolbar, and click the **Pin (📌)** icon in the top-right corner of the pane so it stays open as you click between emails.
 
 ---
 
-## Method 3: Publish to the Official Microsoft Outlook Store (Microsoft AppSource)
+## Option B: List It Publicly in the Official Outlook Add-in Store (Microsoft AppSource)
 
-If you want anyone in the world to find **"Email Sticky Notes"** by searching inside Outlook's built-in **Get Add-ins** store:
+All required submission files (sized to exact Microsoft Partner Center pixel specifications) are saved in your **`store-assets/`** folder:
+- `store-assets/manifest.public.xml`
+- `store-assets/store-logo-300x300.png` (300×300 PNG Store Logo)
+- `store-assets/screenshot-1-light-1366x768.png` (1366×768 PNG Light Mode Screenshot)
+- `store-assets/screenshot-2-dark-1366x768.png` (1366×768 PNG Dark Mode Screenshot)
 
-1. **Checklist Already Built Into This Project**:
-   - Store-compliant PNG icons (`16x16`, `32x32`, `64x64`, `80x80`, `128x128`, and `300x300` Store Logo) are pre-generated in `dist/assets/`.
-   - Store-required Privacy Policy (`/privacy.html`) and Support Page (`/support.html`) are pre-built in `dist/`.
-   - Pinnable Taskpane (`VersionOverridesV1_1`) and `ReadWriteMailbox` permissions are configured.
-2. **Submit via Microsoft Partner Center**:
-   - Enroll in the **Microsoft Partner Center (Commercial Marketplace)** program at [partner.microsoft.com](https://partner.microsoft.com/).
-   - Create a new **Office Add-in** offer.
-   - Upload your `manifest.public.xml` (pointing to your HTTPS host), upload `dist/assets/icon-300.png` as the 300×300 Store Logo, and provide your hosted `/privacy.html` and `/support.html` URLs.
-   - Click **Publish** for Microsoft AppSource certification review.
+### Step 1: Enroll in Microsoft Partner Center
+1. Go to **https://partner.microsoft.com/dashboard/commercial-marketplace**.
+2. Sign in with a Microsoft 365 / Work account and complete the **Commercial Marketplace Publisher** enrollment (free for Office Add-in publishers).
+
+### Step 2: Create the Office Add-in Offer
+1. In the left menu of Partner Center, click **Marketplace offers → Overview**.
+2. At the top, click **+ New offer → Office Store → Office Add-in**.
+3. Fill in the dialog:
+   - **Offer ID**: `jraltd-email-sticky-notes`
+   - **Offer alias**: `Email Sticky Notes`
+4. Click **Create**.
+
+### Step 3: Offer Setup Tab
+1. Under **Customer leads**, leave *"No CRM system connected"* selected.
+2. Click **Save draft**.
+
+### Step 4: Packages Tab (Upload Your Manifest)
+1. Click **Packages** in the left sidebar.
+2. Upload **`store-assets\manifest.public.xml`**.
+3. Wait ~15 seconds for Microsoft's validator to verify your GitHub Pages URLs (`https://jraltd.github.io/sticky-note-for-outlook/...`) and show **Passed**.
+4. Click **Save draft**.
+
+### Step 5: Properties Tab (Copy & Paste These Exact Values)
+1. Click **Properties** in the left sidebar.
+2. **Categories**:
+   - Primary category: **Productivity**
+3. **Legal and support info**:
+   - **Privacy policy link**: `https://jraltd.github.io/sticky-note-for-outlook/privacy.html`
+   - **Support link**: `https://jraltd.github.io/sticky-note-for-outlook/support.html`
+4. Click **Save draft**.
+
+### Step 6: Marketplace Listings Tab (Copy & Paste + Upload Pre-Made Assets)
+1. Click **Marketplace listings → English (United States)** in the left sidebar.
+2. **Name**: `Email Sticky Notes`
+3. **Search results summary**:
+   ```text
+   Attach color-coded, timestamped sticky notes, checklists, and Inbox category tags to any email in Outlook.
+   ```
+4. **Description**:
+   ```text
+   Email Sticky Notes lets you attach private, color-coded, timestamped sticky notes directly to any email or conversation thread in Microsoft Outlook.
+
+   Key Features:
+   • Automatic Inbox Category Marking: Automatically tags annotated emails with a yellow "Sticky Note" category badge right in your Inbox message list and shows a top-of-email notification banner.
+   • Pinnable Taskpane: Pin the sticky notes pane open and click through your Inbox—notes automatically switch to match the selected email.
+   • Rich Sticky Notes: Choose from 6 sticky note colors, 4 priority levels, interactive action checklists, custom #tags, and follow-up reminders.
+   • Global Cross-Email Search: Search and filter notes within the current email or across every email you have ever annotated.
+   • Privacy-First Hybrid Storage: Works out-of-the-box using Office.js Exchange CustomProperties and RoamingSettings, with optional Microsoft Graph Open Extensions sync.
+   • Dark Mode & Backup: Includes automatic Outlook Dark Mode detection plus 1-click JSON and Markdown export/import.
+   ```
+5. **Search keywords**: `sticky notes`, `email notes`, `outlook notes`, `annotations`, `checklist`
+6. **Marketplace media** (upload from `store-assets/`):
+   - **300 x 300 px Store Logo**: Upload `store-assets\store-logo-300x300.png`
+   - **Screenshots (1366 x 768 px PNG)**: Upload both:
+     - `store-assets\screenshot-1-light-1366x768.png` *(Caption: "Attach color-coded sticky notes, checklists, and Inbox category markers to any email.")*
+     - `store-assets\screenshot-2-dark-1366x768.png` *(Caption: "Full Dark Mode support with cross-email search and priority badges.")*
+7. Click **Save draft**.
+
+### Step 7: Review and Publish Tab (Certification Notes)
+1. Click **Review and publish** in the left sidebar.
+2. In the **Notes for certification** box, paste:
+   ```text
+   Testing Instructions for Microsoft Certification Reviewer:
+   1. No external account or paid subscription is required. The add-in works out-of-the-box using Office.js CustomProperties and RoamingSettings.
+   2. Open any email in Outlook (Web, New Outlook for Windows, or Desktop) and click "Email Notes" in the ribbon.
+   3. Click "+ New Note" to attach a sticky note, checklist, or tag to the email.
+   4. Reason for ReadWriteMailbox permission: Used to register and apply the "Sticky Note" color category (Office.context.mailbox.masterCategories and item.categories) so users can visually identify annotated emails in their Inbox list.
+   ```
+3. Click **Publish**.

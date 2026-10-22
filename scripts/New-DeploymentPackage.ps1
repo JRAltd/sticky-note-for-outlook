@@ -14,7 +14,9 @@ if (Test-Path $ZipOutput) {
 
 $ItemsToInclude = @(
   "manifest.xml",
+  "manifest.public.xml",
   "manifest.prod.xml",
+  "store-assets",
   "package.json",
   "tsconfig.json",
   "tsconfig.node.json",
