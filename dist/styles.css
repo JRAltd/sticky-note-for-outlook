@@ -1173,3 +1173,69 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* Banner control row (show/hide the notification above the email) */
+.banner-control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.banner-actions-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.link-btn {
+  border: none;
+  background: transparent;
+  color: var(--brand-primary);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  padding: 0;
+}
+
+.link-btn.danger-link {
+  color: var(--danger-color);
+}
+
+.link-btn:hover {
+  text-decoration: underline;
+}
+
+.readonly-hint {
+  font-size: 10.5px;
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.loading-skeleton-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.skeleton-card {
+  height: 90px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(90deg, var(--bg-subtle) 25%, var(--bg-surface) 50%, var(--bg-subtle) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Mail, Tag, User } from "lucide-react";
 import {
   OUTLOOK_NOTE_CATEGORY_NAME,
   OUTLOOK_URGENT_CATEGORY_NAME,
 } from "../config/constants";
+import { officeContextService } from "../services/office/officeContextService";
 import { EmailContextInfo, StickyNote } from "../types/note";
 
 interface EmailContextBannerProps {
@@ -23,8 +24,32 @@ export const EmailContextBanner: React.FC<EmailContextBannerProps> = ({
   demoEmails,
   onSwitchDemoEmail,
 }) => {
+  const [, forceUpdate] = useState(0);
   const hasNotes = emailNotes.length > 0;
   const hasUrgent = emailNotes.some((n) => n.priority === "urgent");
+  const bannerEnabled = officeContextService.isBannerEnabled();
+  const bannerDismissed = officeContextService.isBannerDismissedForItem(
+    emailContext.itemId
+  );
+
+  const handleHideBannerOnEmail = () => {
+    officeContextService.setBannerDismissedForItem(emailContext.itemId, true);
+    forceUpdate((n) => n + 1);
+  };
+
+  const handleRestoreBannerOnEmail = () => {
+    officeContextService.setBannerDismissedForItem(emailContext.itemId, false);
+    officeContextService.syncEmailVisualMarkers(emailNotes);
+    forceUpdate((n) => n + 1);
+  };
+
+  const handleToggleGlobalBanner = (enabled: boolean) => {
+    officeContextService.setBannerEnabled(enabled);
+    if (enabled) {
+      officeContextService.syncEmailVisualMarkers(emailNotes);
+    }
+    forceUpdate((n) => n + 1);
+  };
 
   return (
     <section className="email-context-banner">
@@ -91,6 +116,72 @@ export const EmailContextBanner: React.FC<EmailContextBannerProps> = ({
             </span>
           </div>
         </div>
+      </div>
+
+      <div className="banner-control-row">
+        {!bannerEnabled ? (
+          <>
+            <span>🔕 Top-of-email notification is turned off.</span>
+            <div className="banner-actions-group">
+              <button
+                type="button"
+                className="link-btn"
+                onClick={() =>
+                  officeContextService.showEmailNotificationBanner(null)
+                }
+              >
+                Clear Email Banner
+              </button>
+              <button
+                type="button"
+                className="link-btn"
+                onClick={() => handleToggleGlobalBanner(true)}
+              >
+                Turn On
+              </button>
+            </div>
+          </>
+        ) : bannerDismissed ? (
+          <>
+            <span>🔕 Notification above this email is removed.</span>
+            <div className="banner-actions-group">
+              <button
+                type="button"
+                className="link-btn"
+                onClick={handleRestoreBannerOnEmail}
+              >
+                Restore on this email
+              </button>
+              <button
+                type="button"
+                className="link-btn"
+                onClick={() => handleToggleGlobalBanner(false)}
+              >
+                Turn Off Always
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <span>🔔 Notification above email:</span>
+            <div className="banner-actions-group">
+              <button
+                type="button"
+                className="link-btn danger-link"
+                onClick={handleHideBannerOnEmail}
+              >
+                ✕ Remove Above Email
+              </button>
+              <button
+                type="button"
+                className="link-btn"
+                onClick={() => handleToggleGlobalBanner(false)}
+              >
+                Turn Off Always
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </section>
   );

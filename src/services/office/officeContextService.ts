@@ -5,6 +5,9 @@ import {
 } from "../../config/constants";
 import { EmailContextInfo, StickyNote } from "../../types/note";
 
+const BANNER_ENABLED_KEY = "jraltd_email_notes_banner_enabled";
+const BANNER_DISMISSED_KEY = "jraltd_email_notes_banner_dismissed";
+
 type ItemChangedCallback = (context: EmailContextInfo) => void;
 
 class OfficeContextService {
@@ -12,6 +15,51 @@ class OfficeContextService {
   private isRunningInOutlook = false;
   private currentDemoIndex = 0;
   private listeners: Set<ItemChangedCallback> = new Set();
+
+  public isBannerEnabled(): boolean {
+    try {
+      const raw = localStorage.getItem(BANNER_ENABLED_KEY);
+      if (raw !== null) return JSON.parse(raw) !== false;
+    } catch {}
+    return true;
+  }
+
+  public setBannerEnabled(enabled: boolean): void {
+    try {
+      localStorage.setItem(BANNER_ENABLED_KEY, JSON.stringify(enabled));
+    } catch {}
+    if (!enabled) {
+      this.showEmailNotificationBanner(null);
+    }
+  }
+
+  public isBannerDismissedForItem(itemId: string): boolean {
+    try {
+      const raw = localStorage.getItem(BANNER_DISMISSED_KEY);
+      const list: string[] = raw ? JSON.parse(raw) : [];
+      return Array.isArray(list) && list.includes(itemId);
+    } catch {
+      return false;
+    }
+  }
+
+  public setBannerDismissedForItem(itemId: string, dismissed: boolean): void {
+    try {
+      const raw = localStorage.getItem(BANNER_DISMISSED_KEY);
+      const list: string[] = raw ? JSON.parse(raw) : [];
+      const next = Array.isArray(list)
+        ? list.filter((x) => x !== itemId)
+        : [];
+      if (dismissed) next.unshift(itemId);
+      localStorage.setItem(
+        BANNER_DISMISSED_KEY,
+        JSON.stringify(next.slice(0, 200))
+      );
+    } catch {}
+    if (dismissed) {
+      this.showEmailNotificationBanner(null);
+    }
+  }
 
   public async initialize(): Promise<EmailContextInfo> {
     if (this.isOfficeInitialized) {
@@ -240,8 +288,17 @@ class OfficeContextService {
     const hasUrgent = notes.some((n) => n.priority === "urgent");
     const topNote = notes.find((n) => n.isPinned) || notes[0];
 
-    // 1. Update Reading Pane info banner
-    if (count > 0 && topNote) {
+    // 1. Update Reading Pane info banner (unless disabled or dismissed for this email)
+    const itemId =
+      notes[0]?.itemId ||
+      (this.isRunningInOutlook && Office.context?.mailbox?.item?.itemId) ||
+      "";
+    if (
+      count > 0 &&
+      topNote &&
+      this.isBannerEnabled() &&
+      (!itemId || !this.isBannerDismissedForItem(itemId))
+    ) {
       const previewTitle = topNote.title || topNote.content.slice(0, 50) || "Note attached";
       const bannerText =
         count === 1
