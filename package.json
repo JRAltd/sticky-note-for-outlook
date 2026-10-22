@@ -1,0 +1,33 @@
+{
+  "name": "outlook-email-sticky-notes",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Production-grade Outlook Add-in for attaching timestamped sticky notes to emails using Office.js CustomProperties and Microsoft Graph Open Extensions.",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --port 3000 --https",
+    "start": "vite --port 3000 --https",
+    "build": "tsc && vite build",
+    "preview": "vite preview --port 3000 --https",
+    "lint": "tsc --noEmit",
+    "validate-manifest": "npx office-addin-manifest validate manifest.xml",
+    "package": "powershell -ExecutionPolicy Bypass -File ./scripts/New-DeploymentPackage.ps1"
+  },
+  "dependencies": {
+    "@azure/msal-browser": "^3.26.0",
+    "lucide-react": "^0.454.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/office-js": "^1.0.427",
+    "@types/office-runtime": "^1.0.35",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-basic-ssl": "^1.1.0",
+    "@vitejs/plugin-react": "^4.3.3",
+    "office-addin-manifest": "^1.15.2",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10"
+  }
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Install Email Sticky Notes for Outlook</title>
+    <link rel="icon" type="image/png" href="./assets/icon-64.png" />
+    <style>
+      body {
+        font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
+        color: #0f172a;
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        line-height: 1.6;
+      }
+      .hero {
+        background: #ffffff;
+        border: 1px solid #dbe2ec;
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        text-align: center;
+      }
+      .hero img {
+        width: 80px;
+        height: 80px;
+        border-radius: 16px;
+        margin-bottom: 12px;
+      }
+      h1 { margin: 0 0 8px; font-size: 26px; color: #0f172a; }
+      .subtitle { color: #475569; margin-bottom: 24px; }
+      .cta-row {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+      }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 22px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 14px;
+      }
+      .btn-primary {
+        background: #0f6cbd;
+        color: #fff;
+      }
+      .btn-secondary {
+        background: #f1f5f9;
+        color: #0f172a;
+        border: 1px solid #cbd5e1;
+      }
+      .steps {
+        margin-top: 28px;
+        text-align: left;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px 24px;
+      }
+      .steps h2 { margin-top: 0; font-size: 17px; }
+      .steps ol { padding-left: 20px; }
+      .steps li { margin-bottom: 10px; }
+    </style>
+  </head>
+  <body>
+    <div class="hero">
+      <img src="./assets/icon-128.png" alt="Email Sticky Notes Icon" />
+      <h1>Email Sticky Notes for Outlook</h1>
+      <p class="subtitle">
+        Attach color-coded, timestamped sticky notes, checklists, and automatic Inbox category
+        markers to any email in Outlook Web, New Outlook for Windows, and Classic Outlook.
+      </p>
+
+      <div class="cta-row">
+        <a class="btn btn-primary" href="./manifest.xml" download="email-sticky-notes-manifest.xml">
+          ⬇️ 1. Download Add-in Manifest (manifest.xml)
+        </a>
+        <a class="btn btn-secondary" href="https://aka.ms/olksideload" target="_blank" rel="noopener">
+          🚀 2. Open Outlook Add-in Installer
+        </a>
+        <a class="btn btn-secondary" href="./taskpane.html">
+          🔍 Try Interactive Web Preview
+        </a>
+      </div>
+
+      <div class="steps">
+        <h2>How Anyone Can Install in 30 Seconds:</h2>
+        <ol>
+          <li>
+            Click <strong>Download Add-in Manifest (manifest.xml)</strong> above to save the
+            configuration file to your computer.
+          </li>
+          <li>
+            Click <strong>Open Outlook Add-in Installer</strong> (or inside Outlook go to
+            <strong>Apps &rarr; Manage Add-ins &rarr; My add-ins</strong>).
+          </li>
+          <li>
+            Under <strong>Custom Addins</strong>, click
+            <strong>Add a custom add-in &rarr; Add from file...</strong> and select the downloaded
+            <code>email-sticky-notes-manifest.xml</code> file.
+          </li>
+          <li>
+            Open any email in Outlook, click <strong>Email Notes</strong> in the ribbon, and pin
+            the pane!
+          </li>
+        </ol>
+      </div>
+    </div>
+  </body>
+</html>

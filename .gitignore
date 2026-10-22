@@ -1,0 +1,7 @@
+node_modules/
+dist/*.map
+.env
+.env.local
+certs/
+*.log
+.DS_Store
