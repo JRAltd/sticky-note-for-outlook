@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <OfficeApp
   xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -7,7 +7,7 @@
   xsi:type="MailApp">
 
   <Id>8a4e91c2-5b7d-4e3a-9f12-6c8d3e4f5a6b</Id>
-  <Version>2.0.0.0</Version>
+  <Version>2.2.0.0</Version>
   <ProviderName>JRAltd Workshop</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Email Sticky Notes"/>

@@ -45,8 +45,8 @@
     bannerDismissed: "jraltd_email_notes_banner_dismissed",
   };
 
-  var NOTE_CATEGORY = "📝 Sticky Note";
-  var URGENT_CATEGORY = "🔥 Urgent Note";
+  var NOTE_CATEGORY = "\uD83D\uDCDD Sticky Note";
+  var URGENT_CATEGORY = "\uD83D\uDD25 Urgent Note";
   var BANNER_ID = "EmailStickyNotesStatus";
   var SYNC_EVENT_KEY = "outlook_sticky_notes_last_sync_event";
   // RoamingSettings has a 32 KB total limit, so keep our share well below it.
@@ -415,8 +415,8 @@
       }) || notes[0];
     var preview = (top && (top.title || String(top.content || "").slice(0, 50))) || "Note attached";
     return notes.length === 1
-      ? '📝 1 Sticky Note: "' + preview + '"'
-      : "📝 " + notes.length + ' Sticky Notes - Top: "' + preview + '"';
+      ? '\uD83D\uDCDD 1 Sticky Note: "' + preview + '"'
+      : "\uD83D\uDCDD " + notes.length + ' Sticky Notes - Top: "' + preview + '"';
   }
 
   /** Applies (or clears) the banner according to the user's preferences. */
