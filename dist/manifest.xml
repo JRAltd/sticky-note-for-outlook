@@ -11,15 +11,13 @@
   <ProviderName>JRAltd Workshop</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <DisplayName DefaultValue="Email Sticky Notes"/>
-  <Description DefaultValue="Attach color-coded, timestamped sticky notes to any email or thread with instant search, tags, and hybrid Office.js / Microsoft Graph Open Extension sync."/>
+  <Description DefaultValue="Attach private, color-coded sticky notes, checklists, priorities, and tags directly to any email in Microsoft Outlook."/>
   <IconUrl DefaultValue="https://jraltd.github.io/sticky-note-for-outlook/assets/icon-64.png"/>
   <HighResolutionIconUrl DefaultValue="https://jraltd.github.io/sticky-note-for-outlook/assets/icon-128.png"/>
   <SupportUrl DefaultValue="https://jraltd.github.io/sticky-note-for-outlook/support.html"/>
 
   <AppDomains>
     <AppDomain>https://jraltd.github.io</AppDomain>
-    <AppDomain>https://login.microsoftonline.com</AppDomain>
-    <AppDomain>https://graph.microsoft.com</AppDomain>
   </AppDomains>
 
   <Hosts>
