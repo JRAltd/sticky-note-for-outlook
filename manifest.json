@@ -1,0 +1,41 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.16/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.16",
+  "version": "2.0.0",
+  "id": "8a4e91c2-5b7d-4e3a-9f12-6c8d3e4f5a6b",
+  "packageName": "com.jraltd.emailnotes",
+  "developer": {
+    "name": "JRAltd Workshop",
+    "websiteUrl": "https://jraltd.github.io/sticky-note-for-outlook/",
+    "privacyUrl": "https://jraltd.github.io/sticky-note-for-outlook/privacy.html",
+    "termsOfUseUrl": "https://jraltd.github.io/sticky-note-for-outlook/terms.html"
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "name": {
+    "short": "Sticky Notes",
+    "full": "Email Sticky Notes for Outlook"
+  },
+  "description": {
+    "short": "Attach color-coded sticky notes, checklists, and tags to emails.",
+    "full": "Email Sticky Notes lets you attach private, color-coded, timestamped sticky notes, interactive checklists, and tags directly to any email or conversation thread in Microsoft Outlook with global cross-email search."
+  },
+  "accentColor": "#F59E0B",
+  "staticTabs": [
+    {
+      "entityId": "emailStickyNotesDashboard",
+      "name": "Sticky Notes",
+      "contentUrl": "https://jraltd.github.io/sticky-note-for-outlook/dashboard.html",
+      "websiteUrl": "https://jraltd.github.io/sticky-note-for-outlook/dashboard.html",
+      "scopes": ["personal"],
+      "context": ["personalTab", "channelTab"]
+    }
+  ],
+  "validDomains": [
+    "jraltd.github.io",
+    "login.microsoftonline.com",
+    "graph.microsoft.com"
+  ]
+}

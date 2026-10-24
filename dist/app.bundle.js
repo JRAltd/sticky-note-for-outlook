@@ -85,6 +85,10 @@
     state.isDark = localStorage.getItem(THEME_KEY) === "dark";
   } catch (e) {}
 
+  if (window.location.search.indexOf("view=all") !== -1 || window.location.pathname.indexOf("dashboard") !== -1) {
+    state.viewScope = "all_emails";
+  }
+
   var toastTimer = null;
   var loadSeq = 0;
 
@@ -735,10 +739,10 @@
     h.push('<div class="addin-shell">');
     renderHeader(h);
 
-    if (state.noItem) {
-      h.push('<main class="notes-scroll-area"><div class="empty-state-box" id="no-item-state"><h3>Select an email</h3><p>Pick any message in your Inbox to view or attach sticky notes.</p></div></main>');
+    if (state.noItem && state.viewScope !== "all_emails") {
+      h.push('<main class="notes-scroll-area"><div class="empty-state-box" id="no-item-state"><h3>Select an email</h3><p>Pick any message in your Inbox to view or attach sticky notes, or switch to the <b>All Emails</b> tab above to view and search all notes.</p></div></main>');
     } else {
-      renderEmailContext(h);
+      if (!state.noItem) renderEmailContext(h);
       renderFilters(h);
       h.push('<main class="notes-scroll-area">');
       if (state.editor) renderEditor(h);

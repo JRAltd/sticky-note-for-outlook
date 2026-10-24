@@ -106,3 +106,20 @@ All required submission files (sized to exact Microsoft Partner Center pixel spe
    4. Reason for ReadWriteMailbox permission: Used to register and apply the "Sticky Note" color category (Office.context.mailbox.masterCategories and item.categories) so users can visually identify annotated emails in their Inbox list.
    ```
 3. Click **Publish**.
+
+---
+
+## Option C: Publishing the Unified Microsoft 365 Package (For Left Apps Bar in Outlook & Teams)
+
+To allow users to pin Sticky Notes directly to Outlook's **far-left vertical Apps sidebar** as a full-page Dashboard:
+
+The package file is pre-built and saved at:
+- **`store-assets/email-sticky-notes-m365.zip`**
+  *(Contains `manifest.json`, `color.png` [192x192], and `outline.png` [32x32])*
+
+### In Partner Center:
+1. In Microsoft Partner Center, click **+ New offer → Teams / Microsoft 365 App**.
+2. Upload **`store-assets\email-sticky-notes-m365.zip`**.
+3. Once published, users can add the app and click **Pin** on the left app rail to keep Sticky Notes permanently docked alongside Mail and Calendar.
+4. When opened from the left rail, it opens the full-screen **Global Sticky Notes Dashboard** (`dashboard.html`) to search, manage, and filter all notes across all emails.
+
