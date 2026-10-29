@@ -93,7 +93,25 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title.trim() && !content.trim() && checklist.length === 0) {
+
+    const finalChecklist = [...checklist];
+    if (newChecklistText.trim()) {
+      finalChecklist.push({
+        id: `chk-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+        text: newChecklistText.trim(),
+        completed: false,
+      });
+      setNewChecklistText("");
+    }
+
+    const finalTags = [...tags];
+    const pendingTag = customTagInput.trim().toLowerCase().replace(/^#/, "");
+    if (pendingTag && !finalTags.includes(pendingTag)) {
+      finalTags.push(pendingTag);
+      setCustomTagInput("");
+    }
+
+    if (!title.trim() && !content.trim() && finalChecklist.length === 0) {
       return;
     }
 
@@ -104,8 +122,8 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
         content,
         color,
         priority,
-        tags,
-        checklist,
+        tags: finalTags,
+        checklist: finalChecklist,
         isPinned,
         scope,
         reminderAt: reminderAt ? new Date(reminderAt).toISOString() : undefined,
@@ -343,7 +361,10 @@ export const NoteEditor: React.FC<NoteEditorProps> = ({
           className="btn-primary"
           disabled={
             isSubmitting ||
-            (!title.trim() && !content.trim() && checklist.length === 0)
+            (!title.trim() &&
+              !content.trim() &&
+              checklist.length === 0 &&
+              !newChecklistText.trim())
           }
         >
           <Save size={14} />

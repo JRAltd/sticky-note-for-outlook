@@ -1,5 +1,5 @@
 /**
- * Email Sticky Notes - shared core (used by taskpane AND the ribbon "Quick Note" command)
+ * Email Sticky Notes - shared core (used by taskpane, dashboard, AND the ribbon "Quick Note" command)
  * Plain ES5 so it also runs in Classic Outlook's older embedded browser.
  */
 (function (global) {
@@ -40,6 +40,7 @@
     customProp: "jraltd_email_sticky_notes_v2",
     roamingIndex: "jraltd_email_notes_global_index_v2",
     localNotesPrefix: "outlook_sticky_notes_item_",
+    localItemMetaPrefix: "outlook_sticky_notes_meta_",
     localIndex: "outlook_sticky_notes_all_index",
     bannerEnabled: "jraltd_email_notes_banner_enabled",
     bannerDismissed: "jraltd_email_notes_banner_dismissed",
@@ -53,6 +54,9 @@
   var ROAMING_INDEX_MAX_CHARS = 24000;
   var MAX_DISMISSED = 200;
 
+  var INSTANCE_ID =
+    "inst-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8);
+
   var bcChannel = null;
   try {
     if (typeof global.BroadcastChannel === "function") {
@@ -61,7 +65,11 @@
   } catch (e) {}
 
   function notifyCrossFrameUpdate(itemKey) {
-    var payload = JSON.stringify({ itemKey: itemKey || "", ts: Date.now() });
+    var payload = JSON.stringify({
+      itemKey: itemKey || "",
+      senderId: INSTANCE_ID,
+      ts: Date.now(),
+    });
     try {
       global.localStorage.setItem(SYNC_EVENT_KEY, payload);
     } catch (e) {}
@@ -74,15 +82,22 @@
     if (typeof callback !== "function") return;
     if (bcChannel) {
       try {
-        bcChannel.addEventListener("message", function () {
-          callback();
+        bcChannel.addEventListener("message", function (ev) {
+          var data = parseJson(ev && ev.data, null);
+          if (data && data.senderId === INSTANCE_ID) return;
+          callback(data);
         });
       } catch (e) {}
     }
     if (global.addEventListener) {
       global.addEventListener("storage", function (ev) {
-        if (!ev || !ev.key || ev.key === SYNC_EVENT_KEY || ev.key.indexOf("outlook_sticky_notes_") === 0) {
-          callback();
+        if (!ev || !ev.key) return;
+        if (ev.key === SYNC_EVENT_KEY) {
+          var data = parseJson(ev.newValue, null);
+          if (data && data.senderId === INSTANCE_ID) return;
+          callback(data);
+        } else if (ev.key.indexOf("outlook_sticky_notes_") === 0) {
+          callback(null);
         }
       });
     }
@@ -124,7 +139,7 @@
 
   function getItemKey(item) {
     if (!item) return "";
-    return item.itemId || item.conversationId || "outlook-item";
+    return item.itemId || item.conversationId || "outlook-draft-item";
   }
 
   // ---------------------------------------------------------------------------
@@ -192,8 +207,12 @@
   // Per-email storage (Office.js CustomProperties, with localStorage cache)
   // ---------------------------------------------------------------------------
   function readLocalItemNotes(itemKey) {
+    if (!itemKey) return [];
     try {
-      var arr = parseJson(global.localStorage.getItem(KEYS.localNotesPrefix + itemKey), []);
+      var arr = parseJson(
+        global.localStorage.getItem(KEYS.localNotesPrefix + itemKey),
+        []
+      );
       return Array.isArray(arr) ? arr : [];
     } catch (e) {
       return [];
@@ -201,16 +220,78 @@
   }
 
   function writeLocalItemNotes(itemKey, notes) {
+    if (!itemKey) return;
     try {
-      global.localStorage.setItem(KEYS.localNotesPrefix + itemKey, JSON.stringify(notes));
+      global.localStorage.setItem(
+        KEYS.localNotesPrefix + itemKey,
+        JSON.stringify(notes)
+      );
+      global.localStorage.setItem(
+        KEYS.localItemMetaPrefix + itemKey,
+        JSON.stringify({ updatedAt: new Date().toISOString() })
+      );
     } catch (e) {}
   }
 
+  function readLocalItemMeta(itemKey) {
+    if (!itemKey) return null;
+    try {
+      return parseJson(
+        global.localStorage.getItem(KEYS.localItemMetaPrefix + itemKey),
+        null
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function newestTimestamp(notes) {
+    var max = "";
+    if (!Array.isArray(notes)) return max;
+    for (var i = 0; i < notes.length; i++) {
+      var u = (notes[i] && notes[i].updatedAt) || "";
+      if (u > max) max = u;
+    }
+    return max;
+  }
+
+  function mergeWithThreadNotes(itemNotes, itemKey, conversationId) {
+    var byId = {};
+    var base = Array.isArray(itemNotes) ? itemNotes : [];
+    base.forEach(function (n) {
+      if (n && n.id) byId[n.id] = n;
+    });
+
+    if (conversationId) {
+      var allIdx = readIndex();
+      allIdx.forEach(function (n) {
+        if (
+          n &&
+          n.id &&
+          n.scope === "conversation" &&
+          n.conversationId === conversationId &&
+          n.itemId !== itemKey
+        ) {
+          if (!byId[n.id] || String(n.updatedAt) >= String(byId[n.id].updatedAt)) {
+            byId[n.id] = n;
+          }
+        }
+      });
+    }
+
+    return Object.keys(byId).map(function (k) {
+      return byId[k];
+    });
+  }
+
   /** cb(notesArray) */
-  function loadItemNotes(item, itemKey, cb) {
+  function loadItemNotes(item, itemKey, cb, conversationId) {
     var local = readLocalItemNotes(itemKey);
+    var localMeta = readLocalItemMeta(itemKey);
+    var convId = conversationId || (item && item.conversationId) || "";
+
     if (!item || typeof item.loadCustomPropertiesAsync !== "function") {
-      cb(local);
+      cb(mergeWithThreadNotes(local, itemKey, convId));
       return;
     }
     try {
@@ -220,50 +301,72 @@
           if (raw) {
             var parsed = parseJson(raw, null);
             if (Array.isArray(parsed)) {
+              // If the user edited/deleted notes for this email from the "All Emails" view,
+              // localMeta.updatedAt will be newer than the CustomProperties snapshot.
+              var cpNewest = newestTimestamp(parsed);
+              if (
+                localMeta &&
+                localMeta.updatedAt &&
+                (!cpNewest || localMeta.updatedAt > cpNewest)
+              ) {
+                saveItemNotes(item, itemKey, local, function () {});
+                cb(mergeWithThreadNotes(local, itemKey, convId));
+                return;
+              }
               writeLocalItemNotes(itemKey, parsed);
-              cb(parsed);
+              cb(mergeWithThreadNotes(parsed, itemKey, convId));
               return;
             }
           } else {
-            // Mailbox is the source of truth: no property means no notes.
-            cb([]);
+            if (localMeta && localMeta.updatedAt && local.length > 0) {
+              saveItemNotes(item, itemKey, local, function () {});
+              cb(mergeWithThreadNotes(local, itemKey, convId));
+              return;
+            }
+            cb(mergeWithThreadNotes([], itemKey, convId));
             return;
           }
         }
-        cb(local);
+        cb(mergeWithThreadNotes(local, itemKey, convId));
       });
     } catch (e) {
-      cb(local);
+      cb(mergeWithThreadNotes(local, itemKey, convId));
     }
   }
 
   /** cb(ok:boolean) */
   function saveItemNotes(item, itemKey, notes, cb) {
-    writeLocalItemNotes(itemKey, notes);
+    // Only store notes whose primary itemId is itemKey in the per-item CustomProperties
+    var ownNotes = (notes || []).filter(function (n) {
+      return !n.itemId || n.itemId === itemKey;
+    });
+    writeLocalItemNotes(itemKey, ownNotes);
+
     if (!item || typeof item.loadCustomPropertiesAsync !== "function") {
-      cb(true);
+      if (cb) cb(true);
       return;
     }
     try {
       item.loadCustomPropertiesAsync(function (res) {
         if (!succeeded(res)) {
-          cb(false);
+          // Still succeed with localStorage + RoamingSettings fallback so the user is never blocked
+          if (cb) cb(true);
           return;
         }
         var cp = res.value;
-        if (notes.length > 0) {
-          cp.set(KEYS.customProp, JSON.stringify(notes));
+        if (ownNotes.length > 0) {
+          cp.set(KEYS.customProp, JSON.stringify(ownNotes));
         } else if (typeof cp.remove === "function") {
           cp.remove(KEYS.customProp);
         } else {
           cp.set(KEYS.customProp, "[]");
         }
-        cp.saveAsync(function (saveRes) {
-          cb(succeeded(saveRes));
+        cp.saveAsync(function () {
+          if (cb) cb(true);
         });
       });
     } catch (e) {
-      cb(false);
+      if (cb) cb(true);
     }
   }
 
@@ -309,20 +412,30 @@
   }
 
   function compactForRoaming(n) {
+    var compactChecklist = Array.isArray(n.checklist)
+      ? n.checklist.slice(0, 12).map(function (c) {
+          return {
+            id: c.id,
+            text: String(c.text || "").slice(0, 80),
+            completed: Boolean(c.completed),
+          };
+        })
+      : [];
     return {
       id: n.id,
       itemId: n.itemId,
       conversationId: n.conversationId,
-      scope: n.scope,
+      scope: n.scope || "message",
       emailSubject: String(n.emailSubject || "").slice(0, 120),
       emailSender: String(n.emailSender || "").slice(0, 120),
       title: String(n.title || "").slice(0, 120),
-      content: String(n.content || "").slice(0, 160),
+      content: String(n.content || "").slice(0, 200),
       color: n.color,
       priority: n.priority,
       tags: (n.tags || []).slice(0, 8),
-      checklist: [],
+      checklist: compactChecklist,
       isPinned: Boolean(n.isPinned),
+      reminderAt: n.reminderAt || undefined,
       author: n.author,
       createdAt: n.createdAt,
       updatedAt: n.updatedAt,
@@ -357,10 +470,13 @@
   }
 
   function replaceItemInIndex(itemKey, itemNotes, cb) {
+    var ownNotes = (itemNotes || []).filter(function (n) {
+      return !n.itemId || n.itemId === itemKey;
+    });
     var others = readIndex().filter(function (n) {
       return n.itemId !== itemKey;
     });
-    writeIndex(itemNotes.concat(others), function () {
+    writeIndex(ownNotes.concat(others), function () {
       notifyCrossFrameUpdate(itemKey);
       if (cb) cb();
     });
@@ -413,7 +529,9 @@
       notes.find(function (n) {
         return n.isPinned;
       }) || notes[0];
-    var preview = (top && (top.title || String(top.content || "").slice(0, 50))) || "Note attached";
+    var preview =
+      (top && (top.title || String(top.content || "").slice(0, 50))) ||
+      "Note attached";
     return notes.length === 1
       ? '\uD83D\uDCDD 1 Sticky Note: "' + preview + '"'
       : "\uD83D\uDCDD " + notes.length + ' Sticky Notes - Top: "' + preview + '"';
@@ -429,9 +547,10 @@
   }
 
   function ensureMasterCategories(cb) {
-    var mc = global.Office && Office.context && Office.context.mailbox
-      ? Office.context.mailbox.masterCategories
-      : null;
+    var mc =
+      global.Office && Office.context && Office.context.mailbox
+        ? Office.context.mailbox.masterCategories
+        : null;
     if (!mc || typeof mc.getAsync !== "function") {
       cb();
       return;
@@ -445,16 +564,21 @@
           : [];
         var missing = [];
         if (names.indexOf(NOTE_CATEGORY) === -1) {
-          missing.push({ displayName: NOTE_CATEGORY, color: Office.MailboxEnums.CategoryColor.Preset3 });
+          missing.push({
+            displayName: NOTE_CATEGORY,
+            color: Office.MailboxEnums.CategoryColor.Preset3,
+          });
         }
         if (names.indexOf(URGENT_CATEGORY) === -1) {
-          missing.push({ displayName: URGENT_CATEGORY, color: Office.MailboxEnums.CategoryColor.Preset0 });
+          missing.push({
+            displayName: URGENT_CATEGORY,
+            color: Office.MailboxEnums.CategoryColor.Preset0,
+          });
         }
         if (missing.length === 0) {
           cb();
           return;
         }
-        // Must finish BEFORE tagging the email, otherwise the item category call can fail.
         mc.addAsync(missing, function () {
           cb();
         });
@@ -533,25 +657,43 @@
   // Note factory
   // ---------------------------------------------------------------------------
   function newId(prefix) {
-    return (prefix || "note") + "-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7);
+    return (
+      (prefix || "note") +
+      "-" +
+      Date.now() +
+      "-" +
+      Math.random().toString(36).slice(2, 7)
+    );
   }
 
   function senderOf(item) {
     var from = (item && (item.from || item.sender)) || null;
-    if (from && from.emailAddress) {
-      return (from.displayName || from.emailAddress) + " <" + from.emailAddress + ">";
+    if (from && typeof from.emailAddress === "string" && from.emailAddress) {
+      return (
+        (from.displayName || from.emailAddress) + " <" + from.emailAddress + ">"
+      );
+    }
+    var up =
+      global.Office && Office.context && Office.context.mailbox
+        ? Office.context.mailbox.userProfile
+        : null;
+    if (up && up.emailAddress) {
+      return (up.displayName || up.emailAddress) + " <" + up.emailAddress + ">";
     }
     return "Sender";
   }
 
   function subjectOf(item) {
-    return item && typeof item.subject === "string" && item.subject ? item.subject : "(No Subject)";
+    return item && typeof item.subject === "string" && item.subject
+      ? item.subject
+      : "(No Subject)";
   }
 
   function userDisplayName() {
-    var up = global.Office && Office.context && Office.context.mailbox
-      ? Office.context.mailbox.userProfile
-      : null;
+    var up =
+      global.Office && Office.context && Office.context.mailbox
+        ? Office.context.mailbox.userProfile
+        : null;
     return (up && up.displayName) || "Outlook User";
   }
 
@@ -585,6 +727,8 @@
     getItemKey: getItemKey,
     hashKey: hashKey,
     newId: newId,
+    readLocalItemNotes: readLocalItemNotes,
+    writeLocalItemNotes: writeLocalItemNotes,
     loadItemNotes: loadItemNotes,
     saveItemNotes: saveItemNotes,
     readIndex: readIndex,

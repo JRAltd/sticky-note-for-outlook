@@ -58,16 +58,33 @@ export function useNotes(emailContext: EmailContextInfo) {
     refreshNotes(false);
   }, [refreshNotes]);
 
-  const persistEmailNotes = useCallback(
-    async (nextNotes: StickyNote[], interactiveGraph = false) => {
+  const persistNotesForTargetEmail = useCallback(
+    async (
+      targetItemId: string,
+      nextTargetNotes: StickyNote[],
+      interactiveGraph = false
+    ) => {
+      const isCurrentEmail = targetItemId === emailContext.itemId;
+      if (isCurrentEmail) {
+        setEmailNotes(nextTargetNotes);
+      }
       setIsSyncing(true);
       try {
+        const targetCtx: EmailContextInfo = isCurrentEmail
+          ? emailContext
+          : {
+              ...emailContext,
+              itemId: targetItemId,
+              restId: targetItemId,
+            };
         const res = await storageManager.saveNotesForEmail(
-          emailContext,
-          nextNotes,
+          targetCtx,
+          nextTargetNotes,
           interactiveGraph
         );
-        setEmailNotes(res.updatedNotes);
+        if (isCurrentEmail) {
+          setEmailNotes(res.updatedNotes);
+        }
         if (res.savedGraph) {
           setGraphSynced(true);
         }
@@ -77,6 +94,17 @@ export function useNotes(emailContext: EmailContextInfo) {
       }
     },
     [emailContext]
+  );
+
+  const persistEmailNotes = useCallback(
+    async (nextNotes: StickyNote[], interactiveGraph = false) => {
+      await persistNotesForTargetEmail(
+        emailContext.itemId,
+        nextNotes,
+        interactiveGraph
+      );
+    },
+    [emailContext.itemId, persistNotesForTargetEmail]
   );
 
   const createNote = useCallback(
@@ -113,8 +141,19 @@ export function useNotes(emailContext: EmailContextInfo) {
 
   const updateNote = useCallback(
     async (noteId: string, changes: Partial<StickyNote>) => {
+      const target =
+        emailNotes.find((n) => n.id === noteId) ||
+        allEmailsNotes.find((n) => n.id === noteId);
+      if (!target) return;
+
+      const targetItemId = target.itemId || emailContext.itemId;
+      const baseList =
+        targetItemId === emailContext.itemId
+          ? emailNotes
+          : allEmailsNotes.filter((n) => n.itemId === targetItemId);
+
       const nowIso = new Date().toISOString();
-      const nextNotes = emailNotes.map((n) =>
+      const nextNotes = baseList.map((n) =>
         n.id === noteId
           ? {
               ...n,
@@ -123,10 +162,16 @@ export function useNotes(emailContext: EmailContextInfo) {
             }
           : n
       );
-      await persistEmailNotes(nextNotes);
+      await persistNotesForTargetEmail(targetItemId, nextNotes);
       showToast("Sticky note updated");
     },
-    [emailNotes, persistEmailNotes, showToast]
+    [
+      allEmailsNotes,
+      emailContext.itemId,
+      emailNotes,
+      persistNotesForTargetEmail,
+      showToast,
+    ]
   );
 
   const deleteNote = useCallback(
@@ -136,34 +181,66 @@ export function useNotes(emailContext: EmailContextInfo) {
         allEmailsNotes.find((n) => n.id === noteId);
       if (!target) return;
 
+      const targetItemId = target.itemId || emailContext.itemId;
+      const baseList =
+        targetItemId === emailContext.itemId
+          ? emailNotes
+          : allEmailsNotes.filter((n) => n.itemId === targetItemId);
+
       setLastDeletedNote(target);
-      const nextNotes = emailNotes.filter((n) => n.id !== noteId);
-      await persistEmailNotes(nextNotes);
+      const nextNotes = baseList.filter((n) => n.id !== noteId);
+      await persistNotesForTargetEmail(targetItemId, nextNotes);
       showToast("Sticky note deleted");
     },
-    [allEmailsNotes, emailNotes, persistEmailNotes, showToast]
+    [
+      allEmailsNotes,
+      emailContext.itemId,
+      emailNotes,
+      persistNotesForTargetEmail,
+      showToast,
+    ]
   );
 
   const undoLastDelete = useCallback(async () => {
     if (!lastDeletedNote) return;
-    const restored = [lastDeletedNote, ...emailNotes];
+    const targetItemId = lastDeletedNote.itemId || emailContext.itemId;
+    const baseList =
+      targetItemId === emailContext.itemId
+        ? emailNotes
+        : allEmailsNotes.filter((n) => n.itemId === targetItemId);
+
+    const restored = [
+      lastDeletedNote,
+      ...baseList.filter((n) => n.id !== lastDeletedNote.id),
+    ];
     setLastDeletedNote(null);
-    await persistEmailNotes(restored);
+    await persistNotesForTargetEmail(targetItemId, restored);
     showToast("Restored deleted sticky note");
-  }, [emailNotes, lastDeletedNote, persistEmailNotes, showToast]);
+  }, [
+    allEmailsNotes,
+    emailContext.itemId,
+    emailNotes,
+    lastDeletedNote,
+    persistNotesForTargetEmail,
+    showToast,
+  ]);
 
   const togglePin = useCallback(
     async (noteId: string) => {
-      const target = emailNotes.find((n) => n.id === noteId);
+      const target =
+        emailNotes.find((n) => n.id === noteId) ||
+        allEmailsNotes.find((n) => n.id === noteId);
       if (!target) return;
       await updateNote(noteId, { isPinned: !target.isPinned });
     },
-    [emailNotes, updateNote]
+    [allEmailsNotes, emailNotes, updateNote]
   );
 
   const toggleChecklistItem = useCallback(
     async (noteId: string, checklistItemId: string) => {
-      const target = emailNotes.find((n) => n.id === noteId);
+      const target =
+        emailNotes.find((n) => n.id === noteId) ||
+        allEmailsNotes.find((n) => n.id === noteId);
       if (!target) return;
       const updatedChecklist = target.checklist.map((item) =>
         item.id === checklistItemId
@@ -172,7 +249,7 @@ export function useNotes(emailContext: EmailContextInfo) {
       );
       await updateNote(noteId, { checklist: updatedChecklist });
     },
-    [emailNotes, updateNote]
+    [allEmailsNotes, emailNotes, updateNote]
   );
 
   const syncWithGraphInteractive = useCallback(async () => {

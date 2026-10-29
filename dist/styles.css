@@ -84,6 +84,16 @@ textarea {
   font-size: inherit;
 }
 
+button svg,
+button span {
+  pointer-events: none;
+}
+
+button {
+  touch-action: manipulation;
+  user-select: none;
+}
+
 .addin-shell {
   display: flex;
   flex-direction: column;
@@ -207,7 +217,7 @@ textarea {
 }
 
 .icon-btn:active {
-  transform: translateY(1px);
+  filter: brightness(0.95);
 }
 
 /* Primary CTA Row: Spacious 2-Button Action Bar */
@@ -231,7 +241,7 @@ textarea {
   gap: 7px;
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(15, 108, 189, 0.28);
-  transition: background 0.15s ease, transform 0.1s ease;
+  transition: background 0.15s ease;
   padding: 0 12px;
   white-space: nowrap;
 }
@@ -241,7 +251,7 @@ textarea {
 }
 
 .btn-cta-new:active {
-  transform: translateY(1px);
+  background: #0c4f8c;
 }
 
 .btn-cta-quick {
@@ -268,7 +278,7 @@ textarea {
 }
 
 .btn-cta-quick:active {
-  transform: translateY(1px);
+  filter: brightness(0.93);
 }
 
 /* Segmented Scope Pill Tabs */
@@ -1109,9 +1119,9 @@ textarea {
 
 .editor-options-grid {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 12px;
-  align-items: center;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 12px;
+  align-items: start;
 }
 
 .editor-field {
@@ -1446,6 +1456,224 @@ textarea {
 .modal-footer {
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
   padding-top: 8px;
   border-top: 1px solid var(--border-color);
+}
+
+/* ============================================================================
+   Thread Scope Badge, Reminder Pill, Quick Templates, & React Class Aliases
+   ============================================================================ */
+.scope-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.sticky-reminder-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+[data-theme="dark"] .sticky-reminder-pill {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.quick-templates-section {
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--border-color);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.quick-templates-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.quick-template-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.template-chip {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-subtle);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.14s ease;
+}
+
+.template-chip:hover {
+  background: var(--brand-light);
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+}
+
+/* React source component class aliases */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-primary-compact {
+  height: 34px;
+  padding: 0 11px;
+  border-radius: 8px;
+  border: none;
+  background: #0f6cbd;
+  color: #ffffff;
+  font-size: 12.5px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.btn-primary-compact:hover {
+  background: #115ea3;
+}
+
+.scope-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--bg-subtle);
+  padding: 3px;
+  border-radius: 9px;
+  border: 1px solid var(--border-color);
+  gap: 4px;
+}
+
+.link-btn {
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 4px 9px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.link-btn.danger-link {
+  background: var(--danger-bg);
+  border-color: var(--danger-border);
+  color: var(--danger);
+}
+
+.card-icon-btn {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.14);
+  background: rgba(255, 255, 255, 0.72);
+  color: #1e293b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+[data-theme="dark"] .card-icon-btn {
+  background: rgba(15, 23, 42, 0.55);
+  border-color: rgba(255, 255, 255, 0.16);
+  color: #f1f5f9;
+}
+
+.card-icon-btn.pinned {
+  background: #0f6cbd;
+  border-color: #0f6cbd;
+  color: #ffffff;
+}
+
+.card-icon-btn.delete-btn:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+.radio-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-field label {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.settings-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.auth-test-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.auth-status-banner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--brand-light);
+  color: var(--brand-primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-anim {
+  animation: spin 0.9s linear infinite;
 }
