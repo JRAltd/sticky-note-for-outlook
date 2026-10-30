@@ -1,12 +1,14 @@
 # How to Install & Publish Email Sticky Notes for Outlook
 
-## Live Public URLs (GitHub + GitHub Pages)
+## Live Public URLs (Custom Domain & GitHub Pages)
+- **Custom Domain**: https://notes.jraltdinc.us/
+- **Privacy Policy URL**: https://notes.jraltdinc.us/privacy.html
+- **Terms of Service URL**: https://notes.jraltdinc.us/terms.html
+- **Support URL**: https://notes.jraltdinc.us/support.html
+- **Live Taskpane**: https://notes.jraltdinc.us/taskpane.html
+- **Live Manifest**: https://notes.jraltdinc.us/manifest.xml
 - **GitHub Repository**: https://github.com/JRAltd/sticky-note-for-outlook
-- **Public Install Page**: https://jraltd.github.io/sticky-note-for-outlook/
-- **Live Public Taskpane**: https://jraltd.github.io/sticky-note-for-outlook/taskpane.html
-- **Live Public Manifest**: https://jraltd.github.io/sticky-note-for-outlook/manifest.xml
-- **Privacy Policy URL**: https://jraltd.github.io/sticky-note-for-outlook/privacy.html
-- **Support URL**: https://jraltd.github.io/sticky-note-for-outlook/support.html
+- **Fallback GitHub Pages URL**: https://jraltd.github.io/sticky-note-for-outlook/
 
 ---
 
@@ -64,8 +66,8 @@ All required submission files (sized to exact Microsoft Partner Center pixel spe
 2. **Categories**:
    - Primary category: **Productivity**
 3. **Legal and support info**:
-   - **Privacy policy link**: `https://jraltd.github.io/sticky-note-for-outlook/privacy.html`
-   - **Support link**: `https://jraltd.github.io/sticky-note-for-outlook/support.html`
+   - **Privacy policy link**: `https://notes.jraltdinc.us/privacy.html`
+   - **Support link**: `https://notes.jraltdinc.us/support.html`
 4. Click **Save draft**.
 
 ### Step 6: Marketplace Listings Tab (Copy & Paste + Upload Pre-Made Assets)

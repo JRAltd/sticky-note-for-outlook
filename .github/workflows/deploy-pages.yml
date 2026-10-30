@@ -39,7 +39,6 @@ jobs:
               -e "s|https://localhost:3000/taskpane.html\"|${BASE_URL}/taskpane.html\"|g" \
               -e "s|https://localhost:3000|${BASE_URL}|g" \
               manifest.xml > dist/manifest.xml
-          cp dist/install.html dist/index.html
           touch dist/.nojekyll
 
       - name: Upload ./dist artifact

@@ -6,9 +6,9 @@
   "packageName": "com.jraltd.emailnotes",
   "developer": {
     "name": "JRAltd Workshop",
-    "websiteUrl": "https://jraltd.github.io/sticky-note-for-outlook/",
-    "privacyUrl": "https://jraltd.github.io/sticky-note-for-outlook/privacy.html",
-    "termsOfUseUrl": "https://jraltd.github.io/sticky-note-for-outlook/terms.html"
+    "websiteUrl": "https://notes.jraltdinc.us/",
+    "privacyUrl": "https://notes.jraltdinc.us/privacy.html",
+    "termsOfUseUrl": "https://notes.jraltdinc.us/terms.html"
   },
   "icons": {
     "color": "color.png",
@@ -27,13 +27,14 @@
     {
       "entityId": "emailStickyNotesDashboard",
       "name": "Sticky Notes",
-      "contentUrl": "https://jraltd.github.io/sticky-note-for-outlook/dashboard.html",
-      "websiteUrl": "https://jraltd.github.io/sticky-note-for-outlook/dashboard.html",
+      "contentUrl": "https://notes.jraltdinc.us/dashboard.html",
+      "websiteUrl": "https://notes.jraltdinc.us/dashboard.html",
       "scopes": ["personal"],
       "context": ["personalTab", "channelTab"]
     }
   ],
   "validDomains": [
+    "notes.jraltdinc.us",
     "jraltd.github.io",
     "login.microsoftonline.com",
     "graph.microsoft.com"
