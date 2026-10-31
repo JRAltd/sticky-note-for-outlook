@@ -23,7 +23,8 @@
         box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
       }
       h1 { margin-top: 0; color: #0f6cbd; }
-      h2 { font-size: 18px; margin-top: 24px; color: #1e293b; }
+      h2 { font-size: 18px; margin-top: 24px; color: #1e293b; border-bottom: 1px solid #f1f5f9; padding-bottom: 6px; }
+      h3 { font-size: 15px; margin-top: 16px; color: #334155; }
       .limited-use-box {
         background: #fffbeb;
         border: 1px solid #facc15;
@@ -31,6 +32,21 @@
         padding: 14px 18px;
         border-radius: 8px;
         margin: 18px 0;
+      }
+      .security-box {
+        background: #f0fdf4;
+        border: 1px solid #86efac;
+        border-left: 4px solid #22c55e;
+        padding: 14px 18px;
+        border-radius: 8px;
+        margin: 18px 0;
+      }
+      code {
+        background: #f1f5f9;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 13px;
+        color: #0f6cbd;
       }
     </style>
   </head>
@@ -67,11 +83,12 @@
       <h2>2. Zero Third-Party Data Collection or Transmission</h2>
       <p>
         Email Sticky Notes does <strong>not</strong> operate any external database, analytics
-        tracker, or third-party server. We do not collect, transmit, sell, rent, or share your
-        emails, message metadata, sticky notes, or personal information with any third party.
+        tracker, advertising network, or third-party server. We do not collect, transmit, sell,
+        rent, or share your emails, message metadata, sticky notes, or personal information with any
+        third party.
       </p>
 
-      <h2>3. Google API Services User Data Policy (Limited Use Disclosure)</h2>
+      <h2>3. Google API Services User Data Policy (Limited Use &amp; AI Disclosures)</h2>
       <div class="limited-use-box">
         <strong>Google Workspace / Gmail Limited Use Compliance:</strong><br />
         Email Sticky Notes' use and transfer to any other app of information received from Google
@@ -99,8 +116,41 @@
           inside the Gmail companion sidebar.
         </li>
       </ul>
+      <p>
+        <strong>Prohibition on AI/ML Model Training:</strong> Data obtained through Google Workspace
+        APIs is never used to develop, improve, or train generalized artificial intelligence (AI)
+        and/or machine learning (ML) models.
+      </p>
 
-      <h2>4. Permissions Used (Outlook &amp; Chrome Extension)</h2>
+      <h2>4. Data Protection Mechanisms and Security Safeguards</h2>
+      <div class="security-box">
+        <strong>Security &amp; Data Protection Statement:</strong><br />
+        We implement rigorous technical and organizational safeguards to ensure user data and Google
+        user data are protected against unauthorized access, destruction, loss, alteration, or disclosure.
+      </div>
+      <h3>Encryption in Transit</h3>
+      <p>
+        All communications between your browser, the add-on client interface, and Google APIs are
+        encrypted in transit using industry-standard protocols, including Transport Layer Security
+        (TLS 1.2 or higher) and secure HTTPS connections. Unencrypted connections are never permitted.
+      </p>
+      <h3>Encryption at Rest</h3>
+      <p>
+        User data and sticky notes are stored exclusively within Google's secure cloud infrastructure
+        (via Google Apps Script <code>PropertiesService.getUserProperties()</code>) and/or in local
+        browser storage protected by your operating system's built-in file encryption. All Google
+        infrastructure employs robust AES-256 encryption at rest. No user data is ever stored on
+        unencrypted storage media or external servers.
+      </p>
+      <h3>Access Controls &amp; Human Access</h3>
+      <p>
+        Strict access controls prevent unauthorized access. Because notes are stored directly within
+        the end-user's private Google account or local device, JRAltd developers and personnel have
+        no access to, cannot view, and cannot extract your emails, metadata, or notes. No human access
+        to Google user data is granted or technically possible.
+      </p>
+
+      <h2>5. Permissions Used (Outlook &amp; Chrome Extension)</h2>
       <ul>
         <li>
           <strong>Outlook Add-in:</strong> Uses mailbox permissions solely to read the active
@@ -115,12 +165,38 @@
         </li>
       </ul>
 
-      <h2>5. Data Retention &amp; Deletion</h2>
+      <h2>6. Data Retention and Deletion Policy</h2>
       <p>
         Because all sticky notes are stored inside your own account or local browser storage, you
-        retain full ownership and control at all times. You can export your notes to JSON/Markdown
-        or permanently delete individual or all sticky notes at any time directly from the Settings
-        menu.
+        retain full ownership and control over your data at all times:
+      </p>
+      <ul>
+        <li>
+          <strong>Retention:</strong> Notes persist only for as long as you choose to keep them
+          associated with your emails or account.
+        </li>
+        <li>
+          <strong>User Deletion:</strong> You can permanently delete individual notes or purge all
+          stored notes at any time with a single click using the in-app delete and clear functions.
+        </li>
+        <li>
+          <strong>Revoking Access:</strong> You can revoke the application's access to your Google
+          account at any time by visiting your
+          <a href="https://myaccount.google.com/connections" target="_blank" rel="noopener">
+            Google Account Third-Party Connections
+          </a>
+          page and removing Email Sticky Notes. Revoking access immediately prevents the add-on
+          from accessing your account.
+        </li>
+      </ul>
+
+      <h2>7. Contact &amp; Developer Information</h2>
+      <p>
+        If you have any questions about this Privacy Policy or our security practices, please contact us at:
+        <br />
+        <strong>Email:</strong> <a href="mailto:jraltd@gmail.com">jraltd@gmail.com</a>
+        <br />
+        <strong>Website:</strong> <a href="https://notes.jraltdinc.us">https://notes.jraltdinc.us</a>
       </p>
     </div>
   </body>
