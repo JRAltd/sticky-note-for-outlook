@@ -7,122 +7,255 @@
     <title>Email Sticky Notes — for Gmail &amp; Microsoft Outlook</title>
     <link rel="icon" type="image/png" href="./assets/icon-64.png" />
     <style>
+      :root {
+        --primary: #1a73e8;
+        --outlook-blue: #0078d4;
+        --slate-900: #0f172a;
+        --slate-700: #334155;
+        --slate-500: #64748b;
+        --slate-100: #f1f5f9;
+        --slate-50: #f8fafc;
+      }
+      * { box-sizing: border-box; }
       body {
-        font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         background: linear-gradient(180deg, #eff6ff 0%, #f8fafc 100%);
-        color: #0f172a;
-        max-width: 780px;
-        margin: 0 auto;
+        color: var(--slate-900);
+        margin: 0;
         padding: 40px 20px;
         line-height: 1.6;
+      }
+      .container {
+        max-width: 860px;
+        margin: 0 auto;
       }
       .hero {
         background: #ffffff;
         border: 1px solid #dbe2ec;
-        border-radius: 16px;
-        padding: 32px;
-        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+        border-radius: 20px;
+        padding: 40px 32px;
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
         text-align: center;
       }
-      .hero img {
-        width: 80px;
-        height: 80px;
-        border-radius: 16px;
-        margin-bottom: 12px;
+      .logo-icon {
+        width: 88px;
+        height: 88px;
+        border-radius: 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
       }
-      h1 { margin: 0 0 8px; font-size: 26px; color: #0f172a; }
-      .subtitle { color: #475569; margin-bottom: 24px; }
-      .cta-row {
+      h1 {
+        margin: 0 0 10px;
+        font-size: 30px;
+        color: var(--slate-900);
+        letter-spacing: -0.5px;
+      }
+      .badge-announcement {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #ecfdf5;
+        color: #047857;
+        border: 1px solid #a7f3d0;
+        padding: 4px 14px;
+        border-radius: 9999px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 16px;
+      }
+      .subtitle {
+        color: var(--slate-700);
+        font-size: 17px;
+        max-width: 680px;
+        margin: 0 auto 32px;
+      }
+      .grid-platforms {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 36px;
+        text-align: left;
+      }
+      @media (max-width: 680px) {
+        .grid-platforms { grid-template-columns: 1fr; }
+      }
+      .platform-card {
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid #e2e8f0;
+        background: #ffffff;
         display: flex;
-        justify-content: center;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin-bottom: 24px;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+      }
+      .platform-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      }
+      .card-gmail {
+        border-color: #bfdbfe;
+        background: linear-gradient(180deg, #ffffff 0%, #f0f7ff 100%);
+      }
+      .card-outlook {
+        border-color: #cbd5e1;
+        background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+      }
+      .platform-card h2 {
+        margin: 0 0 8px;
+        font-size: 19px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .platform-card p {
+        color: var(--slate-700);
+        font-size: 14px;
+        margin: 0 0 18px;
+        flex-grow: 1;
       }
       .btn {
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 8px;
-        padding: 12px 22px;
-        border-radius: 8px;
+        padding: 12px 20px;
+        border-radius: 10px;
         font-weight: 600;
         text-decoration: none;
         font-size: 14px;
+        transition: background 0.15s ease;
       }
-      .btn-primary {
-        background: #0f6cbd;
-        color: #fff;
+      .btn-gmail {
+        background: #1a73e8;
+        color: #ffffff;
       }
+      .btn-gmail:hover { background: #1557b0; }
+      .btn-outlook {
+        background: #0078d4;
+        color: #ffffff;
+      }
+      .btn-outlook:hover { background: #106ebe; }
       .btn-secondary {
         background: #f1f5f9;
-        color: #0f172a;
+        color: var(--slate-900);
         border: 1px solid #cbd5e1;
+        margin-top: 10px;
       }
-      .steps {
-        margin-top: 28px;
+      .features-row {
         text-align: left;
-        background: #f8fafc;
+        background: var(--slate-50);
         border: 1px solid #e2e8f0;
-        border-radius: 12px;
-        padding: 20px 24px;
+        border-radius: 14px;
+        padding: 24px;
+        margin-top: 24px;
       }
-      .steps h2 { margin-top: 0; font-size: 17px; }
-      .steps ol { padding-left: 20px; }
-      .steps li { margin-bottom: 10px; }
+      .features-row h3 {
+        margin: 0 0 14px;
+        font-size: 16px;
+        color: var(--slate-900);
+      }
+      .features-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px 20px;
+        font-size: 13.5px;
+        color: var(--slate-700);
+      }
+      @media (max-width: 600px) {
+        .features-list { grid-template-columns: 1fr; }
+      }
+      footer {
+        margin-top: 32px;
+        padding-top: 20px;
+        border-top: 1px solid #e2e8f0;
+        font-size: 13.5px;
+        color: var(--slate-500);
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      footer a {
+        color: #0f6cbd;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      footer a:hover { text-decoration: underline; }
     </style>
   </head>
   <body>
-    <div class="hero">
-      <img src="./assets/icon-128.png" alt="Email Sticky Notes Icon" />
-      <h1>Email Sticky Notes</h1>
-      <p class="subtitle">
-        Attach private, color-coded, timestamped sticky notes, interactive checklists, priority
-        badges, and reminders directly to emails in <strong>Gmail</strong> (Google Workspace Add-on
-        &amp; Chrome Extension) and <strong>Microsoft Outlook</strong> (Web, Windows, and Classic).
-      </p>
+    <div class="container">
+      <div class="hero">
+        <img class="logo-icon" src="./assets/icon-128.png" alt="Email Sticky Notes Icon" />
+        <div class="badge-announcement">🎉 Officially Approved &amp; Live on Google Workspace Marketplace!</div>
+        <h1>Email Sticky Notes</h1>
+        <p class="subtitle">
+          Attach color-coded sticky notes, interactive checklists, priority badges, and reminders
+          directly to your emails in <strong>Gmail™</strong> and <strong>Microsoft Outlook®</strong>.
+        </p>
 
-      <div class="cta-row">
-        <a class="btn btn-primary" href="./manifest.xml" download="email-sticky-notes-manifest.xml">
-          ⬇️ 1. Download Add-in Manifest (manifest.xml)
-        </a>
-        <a class="btn btn-secondary" href="https://aka.ms/olksideload" target="_blank" rel="noopener">
-          🚀 2. Open Outlook Add-in Installer
-        </a>
-        <a class="btn btn-secondary" href="./taskpane.html">
-          🔍 Try Interactive Web Preview
-        </a>
+        <div class="grid-platforms">
+          <!-- Gmail Platform Card -->
+          <div class="platform-card card-gmail">
+            <div>
+              <h2>📬 Email Sticky Notes for Gmail™</h2>
+              <p>
+                Native Google Workspace Add-on. Works directly in Gmail companion sidebar on desktop web,
+                and inside the official Gmail mobile app (Android™ &amp; iOS).
+              </p>
+            </div>
+            <div>
+              <a class="btn btn-gmail" href="https://workspace.google.com/marketplace/app/email_sticky_notes/400425778084" target="_blank" rel="noopener">
+                🚀 Install from Google Marketplace
+              </a>
+            </div>
+          </div>
+
+          <!-- Outlook Platform Card -->
+          <div class="platform-card card-outlook">
+            <div>
+              <h2>📧 Email Sticky Notes for Outlook®</h2>
+              <p>
+                Full Outlook Add-in with pinnable taskpane and inbox category markers. Works in Outlook Web,
+                New Outlook for Windows, and Classic Outlook.
+              </p>
+            </div>
+            <div>
+              <a class="btn btn-outlook" href="./install.html">
+                📦 Install for Microsoft Outlook
+              </a>
+              <a class="btn btn-secondary" href="./taskpane.html">
+                🔍 Try Web Preview
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="features-row">
+          <h3>🌟 Key Features Built for Productivity:</h3>
+          <div class="features-list">
+            <div>📌 <strong>Contextual Notes:</strong> Automatically link notes to each specific email thread.</div>
+            <div>🎨 <strong>6 Colors &amp; 4 Priorities:</strong> Categorize with Urgent, High, Normal, and Low badges.</div>
+            <div>✅ <strong>Interactive Checklists:</strong> Check off action items directly in your email companion bar.</div>
+            <div>⚡ <strong>1-Click Templates:</strong> Instant To-Do lists, Follow-up reminders, and Meeting notes.</div>
+            <div>🔒 <strong>100% Private:</strong> Zero third-party databases. Stored securely in your own account.</div>
+            <div>🔄 <strong>Cross-Platform Sync:</strong> Export/Import JSON backups between Gmail and Outlook.</div>
+          </div>
+        </div>
+
+        <footer>
+          <a href="https://workspace.google.com/marketplace/app/email_sticky_notes/400425778084" target="_blank" rel="noopener">Google Workspace Marketplace</a>
+          <span>&bull;</span>
+          <a href="https://notes.jraltdinc.us/install.html">Outlook Install Guide</a>
+          <span>&bull;</span>
+          <a href="https://notes.jraltdinc.us/support.html">Support &amp; FAQ</a>
+          <span>&bull;</span>
+          <a href="https://notes.jraltdinc.us/privacy.html">Privacy Policy</a>
+          <span>&bull;</span>
+          <a href="https://notes.jraltdinc.us/terms.html">Terms of Service</a>
+        </footer>
       </div>
-
-      <div class="steps">
-        <h2>How Anyone Can Install in 30 Seconds:</h2>
-        <ol>
-          <li>
-            Click <strong>Download Add-in Manifest (manifest.xml)</strong> above to save the
-            configuration file to your computer.
-          </li>
-          <li>
-            Click <strong>Open Outlook Add-in Installer</strong> (or inside Outlook go to
-            <strong>Apps &rarr; Manage Add-ins &rarr; My add-ins</strong>).
-          </li>
-          <li>
-            Under <strong>Custom Addins</strong>, click
-            <strong>Add a custom add-in &rarr; Add from file...</strong> and select the downloaded
-            <code>email-sticky-notes-manifest.xml</code> file.
-          </li>
-          <li>
-            Open any email in Outlook, click <strong>Email Notes</strong> in the ribbon, and pin
-            the pane!
-          </li>
-        </ol>
-      </div>
-
-      <footer style="margin-top: 28px; padding-top: 18px; border-top: 1px solid #e2e8f0; font-size: 13.5px; color: #64748b; display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;">
-        <a href="https://notes.jraltdinc.us/privacy.html" style="color: #0f6cbd; font-weight: 600; text-decoration: none;">Privacy Policy</a>
-        <span>&bull;</span>
-        <a href="https://notes.jraltdinc.us/terms.html" style="color: #0f6cbd; font-weight: 600; text-decoration: none;">Terms of Service</a>
-        <span>&bull;</span>
-        <a href="https://notes.jraltdinc.us/support.html" style="color: #0f6cbd; font-weight: 600; text-decoration: none;">Support</a>
-      </footer>
     </div>
   </body>
 </html>

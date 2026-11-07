@@ -1,6 +1,14 @@
 # Outlook Email Sticky Notes Add-in (v2.0)
 
+[![Gmail Companion](https://img.shields.io/badge/Gmail%20Companion-Google%20Workspace%20Marketplace-4285F4?style=flat-square&logo=google)](https://workspace.google.com/marketplace/app/email_sticky_notes/400425778084)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+
 A production-grade Microsoft Outlook Add-in for attaching color-coded, timestamped sticky notes, interactive checklists, tags, and reminders directly to emails and conversation threads.
+
+> [!NOTE]
+> **Email Sticky Notes for Gmail is now officially approved and live on the Google Workspace Marketplace!**
+> Install the Gmail companion add-on directly here: **[Google Workspace Marketplace](https://workspace.google.com/marketplace/app/email_sticky_notes/400425778084)**.
+> Notes can be exported and imported between both platforms seamlessly via JSON.
 
 ---
 

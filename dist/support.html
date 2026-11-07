@@ -3,58 +3,154 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Support &amp; Help — Email Sticky Notes for Outlook</title>
+    <title>Support &amp; User Guide — Email Sticky Notes</title>
     <link rel="icon" type="image/png" href="./assets/icon-32.png" />
     <style>
       body {
-        font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
-        background: #f5f7fa;
+        font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+        background: #f8fafc;
         color: #0f172a;
-        max-width: 720px;
+        max-width: 800px;
         margin: 40px auto;
-        padding: 24px;
+        padding: 0 20px 40px;
         line-height: 1.6;
       }
       .card {
-        background: #fff;
-        border: 1px solid #dbe2ec;
-        border-radius: 12px;
-        padding: 28px;
-        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 36px;
+        box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
       }
-      h1 { margin-top: 0; color: #0f6cbd; }
+      h1 { margin-top: 0; color: #1e293b; font-size: 26px; }
+      h2 { color: #0f6cbd; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; margin-top: 32px; font-size: 20px; }
+      h3 { color: #334155; margin-top: 20px; font-size: 16px; }
       code {
-        background: #edf1f7;
+        background: #f1f5f9;
+        color: #0f172a;
         padding: 2px 6px;
         border-radius: 4px;
+        font-size: 0.9em;
+      }
+      .badge-row {
+        display: flex;
+        gap: 12px;
+        margin: 16px 0 24px;
+        flex-wrap: wrap;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #eff6ff;
+        color: #1d4ed8;
+        padding: 6px 14px;
+        border-radius: 9999px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .badge-google {
+        background: #e8f0fe;
+        color: #1a73e8;
+      }
+      .badge-outlook {
+        background: #f0f7ff;
+        color: #0078d4;
+      }
+      .contact-box {
+        background: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        padding: 20px;
+        margin-top: 32px;
+      }
+      footer {
+        margin-top: 32px;
+        text-align: center;
+        font-size: 13px;
+        color: #64748b;
+      }
+      footer a {
+        color: #0f6cbd;
+        text-decoration: none;
+        margin: 0 8px;
       }
     </style>
   </head>
   <body>
     <div class="card">
-      <h1>Email Sticky Notes — Support &amp; User Guide</h1>
+      <h1>Email Sticky Notes — Help &amp; Support</h1>
       <p>
-        Welcome to <strong>Email Sticky Notes for Microsoft Outlook</strong>. Attach color-coded,
-        timestamped sticky notes, checklists, and category markers to any email.
+        Welcome to <strong>Email Sticky Notes</strong>. Keep your inbox organized with private, color-coded,
+        timestamped sticky notes, interactive checklists, and reminders directly attached to your emails.
       </p>
-      <h2>Frequently Asked Questions</h2>
-      <h3>How do I know which emails in my Inbox have a note?</h3>
+
+      <div class="badge-row">
+        <a class="badge badge-google" href="https://workspace.google.com/marketplace/app/email_sticky_notes/400425778084" target="_blank" rel="noopener">
+          🚀 Install on Google Workspace Marketplace (Gmail)
+        </a>
+        <a class="badge badge-outlook" href="./install.html">
+          📬 Install for Microsoft Outlook
+        </a>
+      </div>
+
+      <h2>Gmail™ (Google Workspace Add-on) Guide</h2>
+      <h3>How do I open and use notes in Gmail?</h3>
       <p>
-        Whenever you save a sticky note on an email, the add-in automatically stamps a yellow
-        <code>📝 Sticky Note</code> category pill onto the email in your Outlook Inbox list (and a red
-        <code>🔥 Urgent Note</code> pill if marked Urgent). When you open the email, a banner at the top
-        of the reading pane also displays your top note.
+        1. Open any email message or conversation thread in <strong>Gmail</strong> (on Desktop or the official Gmail mobile app).<br />
+        2. Click the <strong>Email Sticky Notes</strong> icon in Gmail's right-hand companion sidebar (or scroll to the bottom of the email on Android/iOS).<br />
+        3. Click <strong>➕ New Note</strong> or <strong>⚡ Quick To-Do</strong> to add your first note.<br />
+        4. Choose from 6 color themes, 4 priority tags, checklist items, and pin-to-top status.
       </p>
-      <h3>How do I keep the Sticky Notes pane open while clicking through emails?</h3>
+
+      <h3>How do I find all my notes across my mailbox?</h3>
       <p>
-        Click the <strong>Pin</strong> icon in the top-right corner of the Email Sticky Notes taskpane.
-        The pane will stay open and automatically load each email's notes as you move through your Inbox.
+        Open the add-on homepage (or click the <strong>All Notes</strong> icon) to browse the Global Notes Hub.
+        You can search and filter across all annotated emails by keyword, sender, subject, tag, or color.
       </p>
-      <h3>How do I back up or transfer my notes?</h3>
+
+      <h2>Microsoft Outlook® Add-in Guide</h2>
+      <h3>How do I know which emails have a note?</h3>
       <p>
-        Click the <strong>Settings (⚙️)</strong> button inside the add-in and choose
-        <strong>Export JSON</strong> or <strong>Export Markdown</strong>.
+        Whenever you attach a note to an email in Outlook, the add-in automatically assigns an inbox category marker
+        (<code>📝 Sticky Note</code> or <code>🔥 Urgent Note</code>) so annotated emails stand out in your message list.
       </p>
+
+      <h3>How do I keep the taskpane open while browsing emails?</h3>
+      <p>
+        Click the <strong>Pin (📌)</strong> icon in the top right corner of the Outlook taskpane. As you click
+        through messages in your inbox, the notes will instantly update to match the active email.
+      </p>
+
+      <h2>Cross-Platform Portability &amp; Backup</h2>
+      <h3>Can I transfer notes between Gmail and Outlook?</h3>
+      <p>
+        Yes! Both versions use compatible data structures. In either add-on, navigate to <strong>Settings (⚙️)</strong>
+        and choose <strong>Export JSON</strong>. You can then import that file into the other platform to access your notes anywhere.
+      </p>
+
+      <h3>Where is my data stored?</h3>
+      <p>
+        Your privacy is our priority. In Gmail, notes are saved strictly in your private Google account via Apps Script
+        <code>UserProperties</code>. In Outlook, notes reside in your Exchange item properties. Zero data is sent to external third-party servers.
+      </p>
+
+      <div class="contact-box">
+        <h3 style="margin-top: 0;">Need Further Assistance?</h3>
+        <p>If you encounter an issue or have a feature request, please contact our support team:</p>
+        <p>
+          📧 <strong>Email Support:</strong> <a href="mailto:jraltd@gmail.com" style="color: #0f6cbd;">jraltd@gmail.com</a><br />
+          ⏱️ <strong>Response Time:</strong> Typically within 24–48 business hours.
+        </p>
+      </div>
+
+      <footer>
+        <a href="https://notes.jraltdinc.us/index.html">Home</a> &bull;
+        <a href="https://notes.jraltdinc.us/privacy.html">Privacy Policy</a> &bull;
+        <a href="https://notes.jraltdinc.us/terms.html">Terms of Service</a> &bull;
+        <a href="https://workspace.google.com/marketplace/app/email_sticky_notes/400425778084" target="_blank" rel="noopener">Google Workspace Marketplace</a>
+      </footer>
     </div>
   </body>
 </html>
